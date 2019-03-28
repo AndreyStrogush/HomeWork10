@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 public class Xml {
     private static final Logger LOGGER = Logger.getLogger(Xml.class.getName());
@@ -27,13 +27,15 @@ public class Xml {
     }
 
     private void makeXmlFile(List list) {
-        FileOutputStream xmlFile = null;
+        XMLEncoder xmlEncoder = null;
         try {
-            xmlFile = new FileOutputStream("multiLayerTest.xml");
+            FileOutputStream xmlFile = new FileOutputStream("multiLayerTest.xml");
+            xmlEncoder = new XMLEncoder(xmlFile);
+            xmlEncoder.writeObject(list);
         } catch (FileNotFoundException e) {
-            LOGGER.info(e.getMessage());
+            LOGGER.error("File not found exeption : " + e.getMessage());
+        } finally {
+            xmlEncoder.close();
         }
-        XMLEncoder xmlEncoder = new XMLEncoder(xmlFile);
-        xmlEncoder.writeObject(list);
     }
 }
